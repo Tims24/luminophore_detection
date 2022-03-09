@@ -9,9 +9,9 @@ from object_detection.utils import config_util
 import pickle
 
 
-with open('paths.pkl', 'rb') as f1:
+with open('../data/paths.pkl', 'rb') as f1:
     paths = pickle.load(f1)
-with open('files.pkl', 'rb') as f2:
+with open('../data/files.pkl', 'rb') as f2:
     files = pickle.load(f2)
 
 category_index = label_map_util.create_category_index_from_labelmap(files['LABELMAP'])

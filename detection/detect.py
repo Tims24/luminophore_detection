@@ -8,9 +8,9 @@ import cv2
 import numpy as np
 from utils import visualize_boxes_and_labels_on_image_array
 
-with open('paths.pkl', 'rb') as f1:
+with open('../data/paths.pkl', 'rb') as f1:
     paths = pickle.load(f1)
-with open('files.pkl', 'rb') as f2:
+with open('../data/files.pkl', 'rb') as f2:
     files = pickle.load(f2)
 
 # Load pipeline config and build a detection model
