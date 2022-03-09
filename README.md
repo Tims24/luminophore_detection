@@ -13,9 +13,7 @@ More details: https://tensorflow-object-detection-api-tutorial.readthedocs.io/en
 ## 4. Create the train and test records for model
 ## 5. Copy and update the model config
 
-***
 ## Steps 2-5 can bo done with TFOD_Zoo_install.ipynb
-***
 
 ## 6. Move train and test data to 
     \Tensorflow\workspace\images
