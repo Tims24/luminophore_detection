@@ -6,13 +6,11 @@ from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as viz_utils
 from object_detection.builders import model_builder
 from object_detection.utils import config_util
-import pickle
+import joblib
 
 
-with open('../data/paths.pkl', 'rb') as f1:
-    paths = pickle.load(f1)
-with open('../data/files.pkl', 'rb') as f2:
-    files = pickle.load(f2)
+paths = joblib.load("data/paths.joblib")
+files = joblib.load("data/files.joblib")
 
 category_index = label_map_util.create_category_index_from_labelmap(files['LABELMAP'])
 
