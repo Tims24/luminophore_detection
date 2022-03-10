@@ -20,6 +20,8 @@ detection_model = model_builder.build(model_config=configs['model'], is_training
 ckpt = tf.compat.v2.train.Checkpoint(model=detection_model)
 ckpt.restore(os.path.join(paths['CHECKPOINT_PATH'], 'ckpt-3')).expect_partial()
 
+# Change the path to your image
+IMAGE_PATH = "C:\\Users\\Tim\\ML\\luminophore_detection\\Tensorflow\\workspace\\images\\test\\f.png"
 
 @tf.function
 def detect_fn(image):
@@ -31,7 +33,6 @@ def detect_fn(image):
 
 if __name__ == "__main__":
     category_index = label_map_util.create_category_index_from_labelmap(files['LABELMAP'])
-    IMAGE_PATH = "C:\\Users\\Tim\\Desktop\\collectedimages\\circle\\3.png"
     img = cv2.imread(IMAGE_PATH)
     image_np = np.array(img)
 
