@@ -3,15 +3,14 @@ import tensorflow as tf
 from object_detection.utils import label_map_util
 from object_detection.builders import model_builder
 from object_detection.utils import config_util
-import pickle
+import joblib
 import cv2
 import numpy as np
 from utils import visualize_boxes_and_labels_on_image_array
 
-with open('../data/paths.pkl', 'rb') as f1:
-    paths = pickle.load(f1)
-with open('../data/files.pkl', 'rb') as f2:
-    files = pickle.load(f2)
+
+paths = joblib.load("data/paths.joblib")
+files = joblib.load("data/files.joblib")
 
 # Load pipeline config and build a detection model
 configs = config_util.get_configs_from_pipeline_file(files['PIPELINE_CONFIG'])
@@ -32,7 +31,7 @@ def detect_fn(image):
 
 if __name__ == "__main__":
     category_index = label_map_util.create_category_index_from_labelmap(files['LABELMAP'])
-    IMAGE_PATH = "C:\\Users\\Tim\\Desktop\\collectedimages\\circle\\4.png"
+    IMAGE_PATH = "C:\\Users\\Tim\\Desktop\\collectedimages\\circle\\3.png"
     img = cv2.imread(IMAGE_PATH)
     image_np = np.array(img)
 
