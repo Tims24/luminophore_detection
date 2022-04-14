@@ -29,3 +29,9 @@ python Tensorflow\models\research\object_detection\model_main_tf2.py --model_dir
 * You can change the number of train steps, default - 50000
 ### 8. Evaluate the model with this command:
     "python Tensorflow\models\research\object_detection\model_main_tf2.py --model_dir=Tensorflow\workspace\models\my_ssd_mobnet --pipeline_config_path=Tensorflow\workspace\models\my_ssd_mobnet\pipeline.config --checkpoint_dir=Tensorflow\workspace\models\my_ssd_mobnet"
+
+***
+
+# Detection
+* detect.py - image detection
+* tensorflow_cv2.py - cv2 parameters calculation with beam detection from tensorflow
