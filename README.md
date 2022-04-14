@@ -1,7 +1,7 @@
 # luminophore detection using tensorflow object detection and OpenCV
 <p float="left">
-    <img src="readme_images/ellipse.jpg" width="450" height="350">
-    <img src="readme_images/cv2.jpg" width="450" height="350">
+    <img src="readme_images/ellipse.jpg" width="400" height="300">
+    <img src="readme_images/cv2.jpg" width="400" height="300">
 </p>
 * data: https://drive.google.com/drive/folders/1Uibpo8Uxk95mCvoQv3EYiC-kJ9IhUMJT?usp=sharing
 ***
