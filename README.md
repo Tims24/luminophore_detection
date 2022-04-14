@@ -4,8 +4,9 @@
     <img src="readme_images/cv2.jpg" width="400" height="300">
 </p>
 * data: https://drive.google.com/drive/folders/1Uibpo8Uxk95mCvoQv3EYiC-kJ9IhUMJT?usp=sharing
-***
-<br />
+
+
+## Steps
 
 ### 1. Run make_dir.py to create directories
 
