@@ -19,7 +19,7 @@
 
 ## Steps 2-5 can bo done with TFOD_Zoo_install.ipynb
 
-### 6. Move train and test data to 
+### 6. Download data from the link above and move train and test data to 
     \Tensorflow\workspace\images
 
 ### 7. Train the model with this command: 
@@ -33,5 +33,6 @@ python Tensorflow\models\research\object_detection\model_main_tf2.py --model_dir
 ***
 
 # Detection
-* detect.py - image detection
-* tensorflow_cv2.py - cv2 parameters calculation with beam detection from tensorflow
+* detect.py - image detection using TFOD
+* tensorflow_cv2.py - cv2 parameters calculation with beam detection from TFOD
+* cv2_calculation - cv2 parameters calculation
