@@ -1,8 +1,12 @@
-# luminophore detection using tensorflow object detection
-
+# luminophore detection using tensorflow object detection and OpenCV
+<p float="left">
+    <img src="readme_images/ellipse.jpg" width="400" height="300">
+    <img src="readme_images/cv2.jpg" width="400" height="300">
+</p>
 * data: https://drive.google.com/drive/folders/1Uibpo8Uxk95mCvoQv3EYiC-kJ9IhUMJT?usp=sharing
-***
-<br />
+
+
+## Steps
 
 ### 1. Run make_dir.py to create directories
 
@@ -19,7 +23,7 @@
 
 ## Steps 2-5 can bo done with TFOD_Zoo_install.ipynb
 
-### 6. Move train and test data to 
+### 6. Download data from the link above and move train and test data to 
     \Tensorflow\workspace\images
 
 ### 7. Train the model with this command: 
@@ -29,3 +33,10 @@ python Tensorflow\models\research\object_detection\model_main_tf2.py --model_dir
 * You can change the number of train steps, default - 50000
 ### 8. Evaluate the model with this command:
     "python Tensorflow\models\research\object_detection\model_main_tf2.py --model_dir=Tensorflow\workspace\models\my_ssd_mobnet --pipeline_config_path=Tensorflow\workspace\models\my_ssd_mobnet\pipeline.config --checkpoint_dir=Tensorflow\workspace\models\my_ssd_mobnet"
+
+***
+
+# Detection
+* detect.py - image detection using TFOD
+* tensorflow_cv2.py - cv2 parameters calculation with beam detection from TFOD
+* cv2_calculation - cv2 parameters calculation

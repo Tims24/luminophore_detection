@@ -26,6 +26,7 @@ importlib-metadata==4.11.2
 ipykernel==6.9.1
 ipython==8.1.0
 jedi==0.18.1
+joblib==1.1.0
 jupyter-client==7.1.2
 jupyter-core==4.9.2
 keras==2.8.0
