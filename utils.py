@@ -344,5 +344,5 @@ def draw_contours(img, img_contour):
         if area > 500:
             (x1, y1), (ma, MA), angle = cv2.fitEllipse(cnt)
             ellipse = cv2.fitEllipse(cnt)
-            cv2.ellipse(img_contour, ellipse, (0, 0, 255), 2)
+            cv2.ellipse(img_contour, ellipse, (0, 255, 255), 2)
             return (x1, y1), (ma, MA), angle

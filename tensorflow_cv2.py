@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from utils import stack_images, cal_pt_distance, empty, one_shot, draw_contours
+from utils import stack_images, cal_pt_distance, empty, one_shot, draw_contours, visualize_boxes_and_labels_on_image_array
 import math
 import joblib
 import tensorflow as tf
@@ -9,6 +9,8 @@ from object_detection.utils import visualization_utils as viz_utils
 from object_detection.builders import model_builder
 from object_detection.utils import config_util
 import os
+from tango_utils.device import Detector
+import datetime
 
 paths = joblib.load("data/paths.joblib")
 files = joblib.load("data/files.joblib")
@@ -34,6 +36,9 @@ def detect_fn(image):
 
 if __name__ == "__main__":
     kernel = np.ones((5, 5))
+
+    device = Detector.set_device("training/collectords/bn.lumin.meas")
+    attr_device = Detector(0, 0, 0, 0, 0, 0, 0, 0)
 
     # camera parameters
     SOURCE = 0
@@ -78,7 +83,7 @@ if __name__ == "__main__":
         label_id_offset = 1
         image_np_with_detections = image_np.copy()
 
-        viz_utils.visualize_boxes_and_labels_on_image_array(
+        label, _ = visualize_boxes_and_labels_on_image_array(
             image_np_with_detections,
             detections['detection_boxes'],
             detections['detection_classes'] + label_id_offset,
@@ -89,9 +94,7 @@ if __name__ == "__main__":
             min_score_thresh=.8,
             agnostic_mode=False)
 
-        imgContour = img.copy()
         imgEmpty = np.zeros_like(img)
-        imgEmpty_copy = imgEmpty.copy()
 
         # image preprocess
         imgBlur = cv2.GaussianBlur(img, (9, 9), 4)
@@ -107,47 +110,78 @@ if __name__ == "__main__":
         imgCanny = cv2.Canny(mask, 70, 70)
         imgDial = cv2.dilate(imgCanny, kernel, iterations=3)
         imgResult = cv2.erode(imgDial, kernel, iterations=3)
+        # imgResult = imgResult[:, :, 2]
 
         # ellipse draw
         try:
-            (x1, y1), (ma, MA), angle = draw_contours(imgResult, imgContour)
+            (x1, y1), (ma, MA), angle = draw_contours(imgResult, image_np_with_detections)
 
             a = MA / 2
             b = ma / 2
             perimeter = 4 * (math.pi * a * b + (a - b) ** 2) / (a + b)
 
-            cv2.circle(imgContour, (int(x1), int(y1)), 5, (255, 0, 0), -1)
+            cv2.circle(image_np_with_detections, (int(x1), int(y1)), 5, (255, 0, 0), -1)
 
             eccentricity = math.sqrt(pow(a, 2) - pow(b, 2))
             eccentricity = round(eccentricity / a, 2)
+            square = round(math.pi * a * b, 2)
+            dist = round(cal_pt_distance((x+w//2, y+h//2), (int(x1), int(y1))),2)
 
-            cv2.circle(imgContour, (x+w//2, y+h//2), 5, (0, 0, 255), 2)
+            cv2.circle(image_np_with_detections, (x+w//2, y+h//2), 5, (0, 0, 255), 2)
             # cv2.rectangle(temp, (x11, y11), (x11+w11, y11+h11), (0, 255, 0), 2)
-            cv2.line(imgContour, (x, y), (x+w, y+h), (255, 0, 0), 1)
-            cv2.line(imgContour, (x, y+h), (x+w, y), (255, 0, 0), 1)
-            cv2.line(imgContour, (x+w//2, y+h//2), (int(x1), int(y1)), (0, 255, 255), 2)
+            cv2.line(image_np_with_detections, (x, y), (x+w, y+h), (255, 0, 0), 1)
+            cv2.line(image_np_with_detections, (x, y+h), (x+w, y), (255, 0, 0), 1)
+            cv2.line(image_np_with_detections, (x+w//2, y+h//2), (int(x1), int(y1)), (0, 255, 255), 2)
 
             x = cv2.getTrackbarPos("x", "TrackBars")
             y = cv2.getTrackbarPos("y", "TrackBars")
 
             cv2.putText(imgEmpty, f"a={round(a, 1)}, b={round(b, 1)}, c={round(math.sqrt(a ** 2 - b ** 2), 1)}",
                         (x - 70, y - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 1)
-            cv2.putText(imgEmpty, f"S={round(math.pi * a * b, 2)}, L={round(perimeter, 1)}",
+            cv2.putText(imgEmpty, f"S={square}, L={round(perimeter, 1)}",
                         (x - 70, y + 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 1)
-            cv2.putText(imgEmpty, f"e={round(math.sqrt(a ** 2 - b ** 2) / a, 3)}",
+            cv2.putText(imgEmpty, f"e={round(eccentricity, 3)}",
                         (x - 70, y + 40), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 1)
-            cv2.putText(imgEmpty, f"dist={round(cal_pt_distance((x+w//2, y+h//2), (int(x1), int(y1))),2)}",
+            cv2.putText(imgEmpty, f"dist={dist}",
                         (x-70, y+80), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 1)
 
             # image show
-            stacked = stack_images(0.5, ([imgContour, imgEmpty],
-                                         [imgResult, img],
-                                         [image_np_with_detections, img]))
+            stacked = stack_images(0.5, ([imgResult, img],
+                                         [image_np_with_detections, imgEmpty]))
             cv2.imshow("Stack", stacked)
 
-            if cv2.waitKey(1) % 256 == 27:
+            grayImg = cv2.cvtColor(image_np_with_detections, cv2.COLOR_BGR2GRAY)
+            if label in ("ellipse", "circle"):
+                attr_device.status = 1
+                attr_device.timestamp = datetime.datetime.now().timestamp()
+                attr_device.ec = eccentricity
+                attr_device.square = square
+                attr_device.x = x1
+                attr_device.y = y1
+                attr_device.dist = dist
+                attr_device.image = grayImg
+            else:
+                attr_device.status = 0
+                attr_device.timestamp = datetime.datetime.now().timestamp()
+                attr_device.ec = eccentricity
+                attr_device.square = square
+                attr_device.x = x1
+                attr_device.y = y1
+                attr_device.dist = dist
+                attr_device.image = grayImg
+
+            if cv2.waitKey(2000) % 256 == 27:
                 cv2.destroyAllWindows()
+                cv2.imwrite('result.jpg', grayImg)
+                device.write_attributes([("MeasStatus", attr_device.status), ("Timestamp", attr_device.timestamp),
+                                         ("Eccentricity", attr_device.ec), ("Square", attr_device.square),
+                                         ("X", attr_device.x), ("Y", attr_device.y),
+                                         ("Distance", attr_device.dist), ('Image', grayImg)])
                 break
 
         except TypeError:
             pass
+
+        """
+        MeasStatus, timestamp, ec, square, x, y, dist
+        """
