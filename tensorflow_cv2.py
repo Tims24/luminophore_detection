@@ -5,7 +5,6 @@ import math
 import joblib
 import tensorflow as tf
 from object_detection.utils import label_map_util
-from object_detection.utils import visualization_utils as viz_utils
 from object_detection.builders import model_builder
 from object_detection.utils import config_util
 import os
@@ -125,7 +124,7 @@ if __name__ == "__main__":
             eccentricity = math.sqrt(pow(a, 2) - pow(b, 2))
             eccentricity = round(eccentricity / a, 2)
             square = round(math.pi * a * b, 2)
-            dist = round(cal_pt_distance((x+w//2, y+h//2), (int(x1), int(y1))),2)
+            dist = round(cal_pt_distance((x+w//2, y+h//2), (int(x1), int(y1))), 2)
 
             cv2.circle(image_np_with_detections, (x+w//2, y+h//2), 5, (0, 0, 255), 2)
             # cv2.rectangle(temp, (x11, y11), (x11+w11, y11+h11), (0, 255, 0), 2)
